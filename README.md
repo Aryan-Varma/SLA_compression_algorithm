@@ -40,7 +40,7 @@ graph TD
     SIPOSR -->|neighbors of<br>next pixel| WNLS
     SIPOSR -->|neighbors of<br>next pixel| BUF
 
-    CURR_BUF -->|curr_pixel<br>and neighbors| LD_GEN
+    CURR_BUF -->|curr_pixel<br>and neighbors of previous spectrum| LD_GEN
     CURR_BUF --> FACT_GEN
 
     BUF --> LD_GEN
