@@ -10,7 +10,7 @@ This repository contains the Verilog implementation of a Simple Lossless Algorit
 The top-level module stitches together the spatial delay lines, spectral buffer, predictor logic, and encoders into a fully pipelined architecture. 
 
 Pipeline:
-1. Pn-1 16 bit pixel enters the SIPOSR and it outputs the neighbours of Pn and sends it to the WNLS block for WNLS calculation. It also buffers the result for other blocks. The value is also sent to the BRAM which stores enough pixels to access neighbouring pixels from the previous spectrum. 
+1. Pn-1 16 bit pixel enters the SIPOSR and it outputs the neighbours of Pn and sends it to the WNLS block for WNLS calculation. It also buffers the result for other blocks. The 16 bit input pixel is also sent to the BRAM which stores enough pixels to access neighbouring pixels from the previous spectrum. 
 2. Pn pixel enters the bitstream and is sent to BRAM, LDgen and FactorGen. buffered input from previous step is sent to both blocks as well. WNLS output is sent to FactorGen. The BRAM now outputs neighbours of current pixel in previous spectrum this is sent to FactorGen and LDGen.
 3. LDGen and FactorGen outputs are sent to LDSmoother for final smoothing to compress further.
 4. The output of the smoother is sent to the mapping blocks which maps each number(positive or negative) into a positive number.
