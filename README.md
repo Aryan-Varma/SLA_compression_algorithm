@@ -1,12 +1,19 @@
 # SLA Hyperspectral Data Compressor
 
-This repository contains the Verilog implementation of a Simple Lossless Algorithm (SLA) for on-board satellite hyperspectral data compression. The design leverages both spatial and spectral neighborhood pixels to predict the current pixel, calculates the residual error, and compresses the data using Golomb-Rice encoding.
+This repository contains the Verilog implementation of a Simple Lossless Algorithm (SLA) for on-board satellite hyperspectral data compression. 
 
 ---
 
 ## 1. Top-Level Integration (`image_compression_top`)
 
 The top-level module stitches together the spatial delay lines, spectral buffer, predictor logic, and encoders into a fully pipelined architecture. 
+
+Pipeline:
+1. Pn-1 16 bit pixel enters the SIPOSR and it outputs the neighbours of Pn and sends it to the WNLS block for WNLS calculation. It also buffers the result for other blocks.
+2. Pn pixel enters the bitstream and is sent to BRAM, LDgen and FactorGen. Bram outputs previous spectral pixel of current pixel location and sends to FactorGen and LDGen. buffered input from previous step is sent to both blocks as well. WNLS output is sent to FactorGen.
+3. LDGen and FactorGen outputs are sent to LDSmoother for final smoothing to compress further.
+4. The output of the smoother is sent to the mapping blocks which maps each number(positive or negative) into a positive number.
+5. This output is sent to the Goloumb encoder which outputs the final compressed code bitstream along with the valid length.
 
 ### Top-Level Block Diagram
 ```mermaid
