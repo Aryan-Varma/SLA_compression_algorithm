@@ -1,6 +1,7 @@
 # SLA Hyperspectral Data Compressor
 
-This repository contains the Verilog implementation of a Simple Lossless Algorithm (SLA) for on-board satellite hyperspectral data compression. 
+This repository contains the Verilog implementation of a Simple Lossless Algorithm (SLA) for on-board satellite hyperspectral data compression. This project is based on the papers A Simple Lossless Algorithm (SLA) for on-board Satellite Hyperspectral Data Compression and FPGA IMPLEMENTATION OF A SIMPLE LOSSLESS ALGORITHM (SLA) FOR ON-BOARD SATELLITE HYPERSPECTRAL DATA COMPRESSION by Vijay Joshi and Sheeba Rani J
+
 
 ---
 
