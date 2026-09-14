@@ -62,14 +62,6 @@ Generates the spatial neighborhood for the current pixel using a Shift-In-Parall
   * `pixel_w`, `pixel_nw`, `pixel_n`, `pixel_ne`: The West, North-West, North, and North-East neighbors.
 * **Function:** It takes in 16 bit pixel values serially and outputs the neighbours of the next pixel so that the WNLS block can calculate the required value one cycle in advance.
 
-```mermaid
-block-beta
-    columns 3
-    space:1 in(("pixel_in")) space:1
-    down1((" ")) down2((" ")) down3((" "))
-    w["West (w)"] n["North (n)"] nw["North-West (nw)"]
-```
-
 ### B. `hyperspectral_registered_buffer` (Spectral Buffer)
 Buffers an entire image band (frame) to provide the spectral neighbors for the current pixel.
 * **Inputs:** 
