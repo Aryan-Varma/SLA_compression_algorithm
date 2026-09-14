@@ -1,12 +1,18 @@
 # SLA Hyperspectral Data Compressor
 
-This repository contains the Verilog implementation of a Simple Lossless Algorithm (SLA) for on-board satellite hyperspectral data compression. The design leverages spatial neighborhood pixels to predict the current pixel, calculates the residual error, and compresses the data using Golomb-Rice encoding.
-
+This repository contains the Verilog implementation of a Simple Lossless Algorithm (SLA) for on-board satellite hyperspectral data compression. This repository contains the Verilog implementation of a Simple Lossless Algorithm (SLA) for on-board satellite hyperspectral data compression. This project is based on the papers A Simple Lossless Algorithm (SLA) for on-board Satellite Hyperspectral Data Compression and FPGA IMPLEMENTATION OF A SIMPLE LOSSLESS ALGORITHM (SLA) FOR ON-BOARD SATELLITE HYPERSPECTRAL DATA COMPRESSION by Vijay Joshi and Sheeba Rani J
 ---
 
 ## 1. Top-Level Integration (`image_compression_top`)
 
 The top-level module stitches together the spatial delay lines, predictors, and encoders into a fully pipelined architecture. 
+
+Pipeline:
+1. Pn-1 16 bit pixel enters the SIPOSR and it outputs the neighbours of Pn and sends it to the WNLS block for WNLS calculation. It also buffers the result for other blocks. The 16 bit input pixel is also sent to the BRAM which stores enough pixels to access neighbouring pixels from the previous spectrum. 
+2. Pn pixel enters the bitstream and is sent to BRAM, LDgen and FactorGen. buffered input from previous step is sent to both blocks as well. WNLS output is sent to FactorGen. The BRAM now outputs neighbours of current pixel in previous spectrum this is sent to FactorGen and LDGen.
+3. LDGen and FactorGen outputs are sent to LDSmoother for final smoothing to compress further.
+4. The output of the smoother is sent to the mapping blocks which maps each number(positive or negative) into a positive number.
+5. This output is sent to the Goloumb encoder which outputs the final compressed code bitstream along with the valid length.
 
 ### Top-Level Block Diagram
 ```mermaid
@@ -15,7 +21,7 @@ graph TD
     CLK([Clock])
     
     SIPOSR[SIPOSR]
-    CURR_BUF[Current Band Buffer]
+    CURR_BUF[BRAM with previous hyperpectral valeus]
     BUF[One Cycle Buffer]
     WNLS[WNLS]
     LD_GEN[LD Gen]
@@ -68,13 +74,7 @@ Generates the spatial neighborhood for the current pixel using a Shift-In-Parall
   * `pixel_w`, `pixel_nw`, `pixel_n`, `pixel_ne`: The West, North-West, North, and North-East neighbors.
 * **Function:** Uses a shift register of depth equal to `IMAGE_WIDTH` to delay the incoming pixels, naturally forming the spatial neighborhood needed for prediction.
 
-```mermaid
-block-beta
-    columns 3
-    space:1 in(("pixel_in")) space:1
-    down1((" ")) down2((" ")) down3((" "))
-    w["West (w)"] n["North (n)"] nw["North-West (nw)"]
-```
+
 
 ### B. `hyperspectral_current_band_buffer` (Spatial Buffer)
 *Note: This module was previously a BRAM-based spectral buffer but has been updated to a lightweight spatial shift register.*
