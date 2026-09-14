@@ -60,7 +60,7 @@ Generates the spatial neighborhood for the current pixel using a Shift-In-Parall
   * `pixel_in`: The incoming image pixel.
 * **Outputs:** 
   * `pixel_w`, `pixel_nw`, `pixel_n`, `pixel_ne`: The West, North-West, North, and North-East neighbors.
-* **Function:** Uses a shift register of depth equal to `IMAGE_WIDTH` to delay the incoming pixels, naturally forming the spatial neighborhood needed for prediction.
+* **Function:** It takes in 16 bit pixel values serially and outputs the neighbours of the next pixel so that the WNLS block can calculate the required value one cycle in advance.
 
 ```mermaid
 block-beta
@@ -71,7 +71,7 @@ block-beta
 ```
 
 ### B. `hyperspectral_registered_buffer` (Spectral Buffer)
-Buffers an entire image band (frame) to provide the spectral (Z-axis) neighbors for the current pixel.
+Buffers an entire image band (frame) to provide the spectral neighbors for the current pixel.
 * **Inputs:** 
   * `clk`, `rst`, `valid_in`
   * `din`: The incoming image pixel.
@@ -129,4 +129,4 @@ Buffers an entire image band (frame) to provide the spectral (Z-axis) neighbors 
 * **Outputs:** 
   * `bitstream`: The variable-length compressed bits.
   * `code_len`: The number of valid bits in the bitstream.
-* **Function:** Implements Golomb-Rice encoding with a divisor of $2^K$. It splits the mapped residual into a quotient and a remainder. It outputs the quotient as a Unary code (a string of '1's followed by a '0'), followed by the binary remainder.
+* **Function:** Implements Golomb-Rice encoding with a divisor of $2^K$. It splits the mapped residual into a quotient and a remainder. It outputs the quotient as a Unary code (a string of '1's followed by a '0'), followed by the binary remainder. The code_len tells how many bits of the output is valid. 
